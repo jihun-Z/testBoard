@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="custom">
+
+	<resultMap type="custom" id="customMap">
+		<id column="BUSI_NUM" property="busiNum"/>
+		<result column="CUSTOM" property="custom"/>
+		<result column="SHORT" property="nickname"/>
+		<result column="CEO" property="ceo"/>
+		<result column="CHARGE_PERSON" property="charge_Person"/>
+		<result column="BUSI_CONDITION" property="busi_condition"/>
+		<result column="ITEM" property="item"/>
+		<result column="POST_NUM" property="postNum"/>
+		<result column="ADDR1" property="addr1"/>
+		<result column="ADDR2" property="addr2"/>
+		<result column="TEL" property="tel"/>
+		<result column="FAX" property="fax"/>
+		<result column="HOMEPAGE" property="homepage"/>
+		<result column="CO_YN" property="co_YN"/>
+		<result column="FOREIGN_YN" property="foreign_YN"/>
+		<result column="TAX_YN" property="tax_YN"/>
+		<result column="COUNTRY_ENG" property="country_eng"/>
+		<result column="COUNTRY_KOR" property="country_kor"/>
+		<result column="SPECIAL_RELATION" property="special_relation"/>
+		<result column="TRADE_STOP" property="trade_stop"/>
+		<result column="CONTRACT_PERIOD_S" property="contractPeriod_S"/>
+		<result column="CONTRACT_PERIOD_E" property="contractPeriod_E"/>
+		<result column="REGI_INFO_PERSON" property="regi_info_person"/>
+		<result column="REGI_INFO_DATE" property="regi_info_day"/>
+		<result column="MODI_INFO_PERSON" property="modi_info_person"/>
+		<result column="MODI_INFO_DATE" property="modi_info_day"/>
+		
+		<association property="busiNum" column="BUSI_NUM" javaType="String" select="selectAccount"></association>
+	
+	</resultMap>
+	
+	<resultMap type="account" id="accountMap">
+		<id column="BUSI_NUM" property="busiNum"/>
+		<result column="FACTORY" property="factory"/>
+		<result column="TRADE_BANK" property="tradeBank"/>
+		<result column="ACCOUNT_NUM" property="accountNum"/>
+	</resultMap>
+
+	<select id="selectAccount" resultType="string">
+			select * from account where busi_num=#{busiNum}
+	</select>
+	
+	<select id="selectCustomInfo" parameterType="string" resultType="custom" resultMap="customMap">
+		select * from custom where busi_num=#{busiNum}
+	</select>
+	
+	<insert id="insertAccount" parameterType="account">
+	insert into account values(#{busiNum},#{factory},#{tradeBank},#{accountNum})
+	</insert>
+	<insert id="enrollMember" parameterType="custom">
+	insert into custom values(#{busiNum},#{custom},#{nickname,jdbcType=VARCHAR},#{ceo,jdbcType=VARCHAR},#{charge_Person},#{busi_condition,jdbcType=VARCHAR},#{item,jdbcType=VARCHAR},#{postNum,jdbcType=VARCHAR},#{addr1,jdbcType=VARCHAR},#{addr2,jdbcType=VARCHAR},#{tel,jdbcType=VARCHAR},#{fax,jdbcType=VARCHAR},#{homepage,jdbcType=VARCHAR},#{co_YN},#{foreign_YN},#{tax_YN},#{country_eng,jdbcType=VARCHAR},#{country_kor,jdbcType=VARCHAR},#{special_relation},#{trade_stop},#{contractPeriod_S},#{contractPeriod_E},#{regi_info_person,jdbcType=VARCHAR},SYSDATE,#{modi_info_person,jdbcType=VARCHAR},SYSDATE)
+	</insert>
+	
+	<delete id="deleteAccount" parameterType="string">
+	delete from account where busi_num=#{busiNum}
+	</delete>
+	<delete id="deleteCustom" parameterType="string">
+	delete from custom where busi_num=#{busiNum}
+	</delete>
+	
+	<update id="updateAccount" parameterType="account">
+		update account set factory=#{factory},trade_bank=#{tradeBank},account_num=#{accountNum} where busi_num=#{busiNum}
+	</update>
+	<update id="updateCustom" parameterType="custom">
+		update custom set short=#{nickname,jdbcType=VARCHAR},ceo=#{ceo,jdbcType=VARCHAR},charge_person=#{charge_Person},busi_condition=#{busi_condition,jdbcType=VARCHAR},item=#{item,jdbcType=VARCHAR},post_num=#{postNum,jdbcType=VARCHAR},addr1=#{addr1,jdbcType=VARCHAR},addr2=#{addr2,jdbcType=VARCHAR},tel=#{tel,jdbcType=VARCHAR},fax=#{fax,jdbcType=VARCHAR},homepage=#{homepage,jdbcType=VARCHAR},co_yn=#{co_YN},foreign_yn=#{foreign_YN},tax_yn=#{tax_YN},country_eng=#{country_eng,jdbcType=VARCHAR},country_kor=#{country_kor,jdbcType=VARCHAR},special_relation=#{special_relation},trade_stop=#{trade_stop},contract_period_s=#{contractPeriod_S},contract_period_e=#{contractPeriod_E},regi_info_person=#{regi_info_person,jdbcType=VARCHAR},modi_info_person=#{modi_info_person,jdbcType=VARCHAR},SYSDATE where busi_num=#{busiNum}
+	</update>
+	
+	<select id="searchCustom" resultType="map">
+	select busi_num,custom from custom 
+		<!-- <if test="busiNum !=null and custom != null">
+		where busi_num Like '%'||#{busiNum}||'%' and custom Like '%'||#{custom}||'%'
+		</if> -->
+			<if test="busiNum != null">
+				where busi_num Like '%'||#{busiNum}||'%'
+			
+			</if>
+			<if test="custom != null">
+				and custom Like '%'||#{custom}||'%'
+			</if>
+	</select>
+	
+</mapper>
