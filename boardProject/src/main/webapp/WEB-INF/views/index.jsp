@@ -178,7 +178,7 @@ function popup(){
 	let url="${path}/popup.do";
 	let name="popup";
 	let w=300;
-	let h=150;
+	let h=400;
 	
 	pop=window.open(url,name,"width="+w+",height="+h+",left=100,right=100");
 	//자식창의 opner객체가 생성된다.이것은 부모의 window객체를 가르킨다.

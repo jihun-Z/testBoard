@@ -30,7 +30,7 @@
 		<result column="MODI_INFO_PERSON" property="modi_info_person"/>
 		<result column="MODI_INFO_DATE" property="modi_info_day"/>
 		
-		<association property="busiNum" column="account" javaType="String" select="selectAccount"></association>
+		<association property="busiNum" column="BUSI_NUM" javaType="string" select="selectAccount"></association>
 	
 	</resultMap>
 	
@@ -41,13 +41,13 @@
 		<result column="ACCOUNT_NUM" property="accountNum"/>
 	</resultMap>
 
-	<select id="selectAccount" resultType="string">
-			select * from account where busi_num=#{busiNum}
-	</select>
-	
 	<select id="selectCustomInfo" parameterType="string" resultType="custom" resultMap="customMap">
 		select * from custom where busi_num=#{busiNum}
 	</select>
+	<select id="selectAccount" parameterType="string">
+			select * from account where busi_num=#{busiNum}
+	</select>
+	
 	
 	<insert id="insertAccount" parameterType="account">
 	insert into account values(#{busiNum},#{factory},#{tradeBank},#{accountNum})

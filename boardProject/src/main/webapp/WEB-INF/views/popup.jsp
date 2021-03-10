@@ -12,6 +12,11 @@
 <script src="${path }/resources/js/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="${path }/resources/css/style.css">
 </head>
+
+<style>
+
+
+</style>
 <script type="text/javascript" defer>
 	
 	//클릭해서 
