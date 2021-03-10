@@ -74,6 +74,10 @@ public class BoardController {
 		int result=service.deleteCustom(busiNum);
 		return result;
 	}
-	
+	//팝업창
+	@RequestMapping("/popup.do")
+	public String popup() {
+		return "popup";
+	}
 	
 }

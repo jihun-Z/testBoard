@@ -114,6 +114,7 @@
 			<h5>국가</h5>
 			<input type="text" class="lang" name="lang" id="lang"/>
 			<button type="button"  id="langSearch">검색</button>
+			<button type="button" onclick="popup();">언어 검색</button>
 			
 			<select  name="langs" id="langs" style="display:none;">
 				<option value="한국어">한국어</option>
@@ -170,6 +171,22 @@
 	</div>
 </form>
 <script type="text/javascript">
+//팝업 창
+
+function popup(){
+	let pop=""; //window객체를 저장할 변수
+	let url="${path}/popup.do";
+	let name="popup";
+	let w=300;
+	let h=150;
+	
+	pop=window.open(url,name,"width="+w+",height="+h+",left=100,right=100");
+	//자식창의 opner객체가 생성된다.이것은 부모의 window객체를 가르킨다.
+	const result=opener.popup=$(this).val(e.target.val());
+	console.log(result);
+	
+}
+
 
 //사업자 검색 기능 
 

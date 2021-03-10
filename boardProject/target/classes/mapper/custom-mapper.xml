@@ -30,7 +30,7 @@
 		<result column="MODI_INFO_PERSON" property="modi_info_person"/>
 		<result column="MODI_INFO_DATE" property="modi_info_day"/>
 		
-		<association property="busiNum" column="BUSI_NUM" javaType="String" select="selectAccount"></association>
+		<association property="busiNum" column="account" javaType="String" select="selectAccount"></association>
 	
 	</resultMap>
 	
