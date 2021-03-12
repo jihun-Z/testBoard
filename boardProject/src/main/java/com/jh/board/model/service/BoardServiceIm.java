@@ -66,4 +66,11 @@ public class BoardServiceIm implements BoardService {
 		// TODO Auto-generated method stub
 		return dao.selectCustomInfo(session,busiNum);
 	}
+
+
+	@Override
+	public List<Map> selectCustomList(String busiNum) {
+		// TODO Auto-generated method stub
+		return dao.selectCustomList(busiNum,session);
+	}
 }

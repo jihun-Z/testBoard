@@ -23,8 +23,6 @@
 
 </head>
 <body>
-     <c:set var="map" value="${map}"/>
-<%-- <div>111111111<c:out value="${map.busiNum}"/><c:out value="${map.nickname}"/></div> --%>
 
 <div class="search-List-container">
 		<div class="search-box">
@@ -172,6 +170,9 @@
 </form>
 <script type="text/javascript">
 //팝업 창
+$("#popup").click(function(){
+	popup();
+});
 
 function popup(){
 	let pop=""; //window객체를 저장할 변수
@@ -182,8 +183,8 @@ function popup(){
 	
 	pop=window.open(url,name,"width="+w+",height="+h+",left=100,right=100");
 	//자식창의 opner객체가 생성된다.이것은 부모의 window객체를 가르킨다.
-	const result=opener.popup=$(this).val(e.target.val());
-	console.log(result);
+	//const result=opener.popup=$(this).val(e.target.val());
+	//console.log(result);
 	
 }
 
@@ -218,7 +219,7 @@ function searchBtn(e){
 				
 				for(let i=0;i<data.length;i++){
 					out +="<tr>";
-					out +="<td id='AcNum' style='width:200px; height: 30px; text-align: center;' onclick='selectCustom("+data[i].BUSI_NUM+",event);'>"+data[i].BUSI_NUM+"</td>";
+					out +="<td id='AcNum' name='busiNum' style='width:200px; height: 30px; text-align: center;' onclick='selectCustom("+data[i].BUSI_NUM+",event);'>"+data[i].BUSI_NUM+"</td>";
 					out +="<td style='width:200px; height: 30px; text-align: center;' onclick='selectCustom("+data[i].CUSTOM+");'>"+data[i].CUSTOM+"</td>";
 					out +="</tr>";	
 				console.log(""+data[i].BUSI_NUM);
@@ -297,7 +298,8 @@ $(document).on('click',".trade_stop",function(){
 	}
 });  
 
-function checkedFn(){
+$(document).on('load',function(){
+	
 	if($("input:checkbox[name:trade_stop]").is(":checked") === true){
 		$(".trade_stop").val("y");
 	}else{
@@ -308,7 +310,7 @@ function checkedFn(){
 	}else{
 		$(".special_relation").val("n");
 	}
-};
+});
 
 		
 
@@ -398,6 +400,11 @@ function enlloBtn(){
 //delete
 function deleteFn(){
 	let busiNum=$("#busiNum").val();
+	console.log(busiNum);
+	let choice=$("#append");
+	let id=$("td [name=busiNum]").text();
+	console.log(id);
+
 	$.ajax({
 		url:"${path}/deleteMember.do",
 		type:"get",
@@ -406,11 +413,20 @@ function deleteFn(){
 		data:{
 			busiNum:busiNum
 		},
-		success:function(result){
-			if(result === 1){
-				alert("삭제 되었습니다.");
-			}else{
-				alert("실패하였습니다.")
+		success:function(data){
+			 let out="";
+				
+				for(let i=0;i<data.length;i++){
+					out +="<tr>";
+					out +="<td id='AcNum' name='busiNum' style='width:200px; height: 30px; text-align: center;' onclick='selectCustom("+data[i].BUSI_NUM+",event);'>"+data[i].BUSI_NUM+"</td>";
+					out +="<td style='width:200px; height: 30px; text-align: center;' onclick='selectCustom("+data[i].CUSTOM+");'>"+data[i].CUSTOM+"</td>";
+					out +="</tr>";	
+				console.log(""+data[i].BUSI_NUM);
+				}
+				$("#append").html(out); 
+			},
+			erro:function(){
+				alert("updateError");
 			}
 		}
 	});
@@ -430,11 +446,13 @@ function selectCustom(busiNum,e){
         dataType: "json",
 		success:function(data){
 			console.log(data);
+			console.log(data.account);
 			let ff="";	
 				$("#updateBtn").show();
 				$("#enrollBtn").hide();
 		//for(let i in data){
 				let value=data;
+				
 			//for(let i=0; i<data.length;i++){
 				ff +='<div class="input-container" >';
 				ff +='사업자 번호:<input type="text" class="input-text" id="busiNum" name="busiNum" value="'+value.busiNum +'"/>';
@@ -475,8 +493,8 @@ function selectCustom(busiNum,e){
 				ff +='<h5>국가</h5>';
 				ff +='<input type="text" class="lang" name="lang" id="lang" value="'+(value.conutry_kor !== null?""+value.conutry_kor+"":""+value.conutry_eng+"")+'"/>';
 				ff +='<button type="button"  id="langSearch">검색</button>';
+				ff +='<button type="button"  onclick="popup();">언어검색</button>';
 				ff +='<select  name="langs" id="langs" style="display:none;">';
-				ff +='<option >언어</option>';
 				ff +='<option value="한국어" '+(value.conutry_kor ==="한국어"?"selected":"")+'>한국어</option>';
 				ff +='<option value="영어" '+(value.conutry_eng ==="영어"?"selected":"")+'>영어</option>';
 				ff +='<option value="일본어" '+(value.conutry_eng ==="일본어"?"selected":"")+'>일본어</option>';
@@ -491,8 +509,8 @@ function selectCustom(busiNum,e){
 				ff +='<input type="date" class="input--text" id="contractPeriod_E" name="contractPeriod_E"  id="endDate" value="'+value.contractPeriod_E +'" autocomplete="off"  required>';
 				ff +='</div>';
 				ff +='<div class="person-container">';
-				ff +='<input type="text" id="modi_info_person" name="modi_info_person" value="'+value.modi_info_person +'"/>';
-				ff +='<input type="text" id="regi_info_person" name="regi_info_person" value="'+value.regi_info_person +'"/>';
+				ff +='<input type="text" id="modi_info_person" name="modi_info_person" value="'+(value.modi_info_person !== null?""+value.modi_info_person+"":"") +'"/>';
+				ff +='<input type="text" id="regi_info_person" name="regi_info_person" value="'+(value.regi_info_person !== null?""+value.regi_info_person+"":"")+'"/>';
 				ff +='</div>';
 				ff +='</div>';
 				ff +='<h2>거래처 거래정보</h2>';
@@ -507,9 +525,9 @@ function selectCustom(busiNum,e){
 				ff +='</thead>';
 				ff +='<tbody>';
 				ff +='<tr>';
-				ff +='<td><input type="text" id="factory" name="factory" value="'+value.account.factory+'"></td>';
-				ff +='<td><input type="text" id="tradeBank" name="tradeBank" value="'+value.account.tradeBank +'"></td>';
-				ff +='<td><input type="text" id="accountNum" name="accountNum" value="'+value.account.accountNum +'"></td>';
+				ff +='<td><input type="text" id="factory" name="factory" value="'+(value.account !== null?""+value.account.factory+"":"")+'"></td>';
+				ff +='<td><input type="text" id="tradeBank" name="tradeBank" value="'+(value.account !== null?""+value.account.tradeBank+"":"")+'"></td>';
+				ff +='<td><input type="text" id="accountNum" name="accountNum" value="'+(value.account !== null?""+value.account.accountNum+"":"" )+'"></td>';
 				ff +='</tr>';
 				ff +='</tbody>';
 				ff +='</table>';
@@ -571,7 +589,6 @@ function fn_triggerEnd(e){
         }
     });
 };
-	
 
 
 </script>

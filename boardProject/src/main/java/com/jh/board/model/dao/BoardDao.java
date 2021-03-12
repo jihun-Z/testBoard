@@ -26,4 +26,6 @@ public interface BoardDao {
 
 	List<Map> searchCustom(SqlSession session, Custom custom);
 
+	List<Map> selectCustomList(String busiNum, SqlSession session);
+
 }

@@ -29,13 +29,12 @@
 		<result column="REGI_INFO_DATE" property="regi_info_day"/>
 		<result column="MODI_INFO_PERSON" property="modi_info_person"/>
 		<result column="MODI_INFO_DATE" property="modi_info_day"/>
-		
-		<association property="busiNum" column="BUSI_NUM" javaType="string" select="selectAccount"></association>
+		<!--(property="account") Custom객체 Account account변수명이다.  -->
+		<association property="account" column="BUSI_NUM" javaType="String" select="selectAccount"></association>
 	
 	</resultMap>
 	
 	<resultMap type="account" id="accountMap">
-		<id column="BUSI_NUM" property="busiNum"/>
 		<result column="FACTORY" property="factory"/>
 		<result column="TRADE_BANK" property="tradeBank"/>
 		<result column="ACCOUNT_NUM" property="accountNum"/>
@@ -44,8 +43,8 @@
 	<select id="selectCustomInfo" parameterType="string" resultType="custom" resultMap="customMap">
 		select * from custom where busi_num=#{busiNum}
 	</select>
-	<select id="selectAccount" parameterType="string">
-			select * from account where busi_num=#{busiNum}
+	<select id="selectAccount" parameterType="string" resultMap="accountMap">
+			select FACTORY,TRADE_BANK,ACCOUNT_NUM from account where busi_num=#{busiNum}
 	</select>
 	
 	
@@ -67,7 +66,7 @@
 		update account set factory=#{factory},trade_bank=#{tradeBank},account_num=#{accountNum} where busi_num=#{busiNum}
 	</update>
 	<update id="updateCustom" parameterType="custom">
-		update custom set short=#{nickname,jdbcType=VARCHAR},ceo=#{ceo,jdbcType=VARCHAR},charge_person=#{charge_Person},busi_condition=#{busi_condition,jdbcType=VARCHAR},item=#{item,jdbcType=VARCHAR},post_num=#{postNum,jdbcType=VARCHAR},addr1=#{addr1,jdbcType=VARCHAR},addr2=#{addr2,jdbcType=VARCHAR},tel=#{tel,jdbcType=VARCHAR},fax=#{fax,jdbcType=VARCHAR},homepage=#{homepage,jdbcType=VARCHAR},co_yn=#{co_YN},foreign_yn=#{foreign_YN},tax_yn=#{tax_YN},country_eng=#{country_eng,jdbcType=VARCHAR},country_kor=#{country_kor,jdbcType=VARCHAR},special_relation=#{special_relation},trade_stop=#{trade_stop},contract_period_s=#{contractPeriod_S},contract_period_e=#{contractPeriod_E},regi_info_person=#{regi_info_person,jdbcType=VARCHAR},modi_info_person=#{modi_info_person,jdbcType=VARCHAR},SYSDATE where busi_num=#{busiNum}
+		update custom set custom=#{custom},short=#{nickname,jdbcType=VARCHAR},ceo=#{ceo,jdbcType=VARCHAR},charge_person=#{charge_Person},busi_condition=#{busi_condition,jdbcType=VARCHAR},item=#{item,jdbcType=VARCHAR},post_num=#{postNum,jdbcType=VARCHAR},addr1=#{addr1,jdbcType=VARCHAR},addr2=#{addr2,jdbcType=VARCHAR},tel=#{tel,jdbcType=VARCHAR},fax=#{fax,jdbcType=VARCHAR},homepage=#{homepage,jdbcType=VARCHAR},co_yn=#{co_YN},foreign_yn=#{foreign_YN},tax_yn=#{tax_YN},country_eng=#{country_eng,jdbcType=VARCHAR},country_kor=#{country_kor,jdbcType=VARCHAR},special_relation=#{special_relation},trade_stop=#{trade_stop},contract_period_s=#{contractPeriod_S},contract_period_e=#{contractPeriod_E},regi_info_person=#{regi_info_person,jdbcType=VARCHAR},modi_info_person=#{modi_info_person,jdbcType=VARCHAR},modi_info_date=SYSDATE where busi_num=#{busiNum}
 	</update>
 	
 	<select id="searchCustom" resultType="map">
@@ -82,6 +81,10 @@
 			<if test="custom != null">
 				and custom Like '%'||#{custom}||'%'
 			</if>
+	</select>
+	
+	<select id="selectCustomList" resultType="map">
+		select busi_num,custom from custom
 	</select>
 	
 </mapper>

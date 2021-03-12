@@ -23,15 +23,17 @@ public class BoardController {
 	@RequestMapping("/customerEnllo.do")
 	public int enrollMember(Custom custom,Account account,String lang) {
 		int result;
+		String lan=lang.trim();
 		if(custom.getBusiNum().equals("")||custom.getBusiNum()==null||
 				custom.getCustom().equals("")||custom.getCustom()==null) {
 			return result=0;
 		}
-		if(lang.equals("한국어")) {
-			custom.setCountry_kor(lang);
+		if(lan.equals("한국어")) {
+			custom.setCountry_kor(lan);
 		}else {
-			custom.setCountry_eng(lang);
+			custom.setCountry_eng(lan);
 		}
+		System.out.println(""+lan);
 		
 		 result=service.enrollMember(custom,account);
 		return result;
@@ -59,9 +61,18 @@ public class BoardController {
 	//update
 	@ResponseBody
 	@RequestMapping("/updateMember.do")
-	public int updateCustom(Custom custom,Account account) {
+	public int updateCustom(Custom custom,Account account,String lang) {
+		int result;
+
+			
+			if(!lang.equals("한국어")) {
+				custom.setCountry_eng(lang);
+			}else {
+				custom.setCountry_kor(lang);
+			}
+			System.out.println(custom);
+			 result=service.updateCustom(custom,account);
 		
-		int result=service.updateCustom(custom,account);
 		
 		return result;
 	}
@@ -69,10 +80,13 @@ public class BoardController {
 	//delete
 	@ResponseBody
 	@RequestMapping("/deleteMember.do")
-	public int deleteCustom(String busiNum) {
-		
+	public List<Map> deleteCustom(String busiNum) {
+		List<Map> map= null;
 		int result=service.deleteCustom(busiNum);
-		return result;
+		if(result == 1) {
+			map=service.selectCustomList(busiNum);
+		}
+		return map;
 	}
 	//팝업창
 	@RequestMapping("/popup.do")

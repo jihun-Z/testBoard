@@ -64,6 +64,12 @@ public class BoardDaoIm implements BoardDao {
 		// TODO Auto-generated method stub
 		return session.selectList("custom.searchCustom",custom);
 	}
+
+	@Override
+	public List<Map> selectCustomList(String busiNum, SqlSession session) {
+		// TODO Auto-generated method stub
+		return session.selectList("custom.selectCustomList",busiNum);
+	}
 	
 	
 

@@ -18,6 +18,8 @@ public interface BoardService {
 	int deleteCustom(String busiNum);
 
 	Custom selectCustomInfo(String busiNum);
+
+	List<Map> selectCustomList(String busiNum);
 	
 
 
